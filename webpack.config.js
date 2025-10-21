@@ -17,12 +17,12 @@ module.exports = {
         })*/
 	],
 	entry: {
-		app: path.resolve(__dirname, './frontend/main.js'),
+		app: path.resolve(__dirname, './frontend/src/app.ts'),
 	},
     devtool: 'source-map',
-    mode: "development", //production, development
+    mode: "production", //production, development
     stats: {
-        errorDetails: true
+        //errorDetails: true
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
@@ -33,7 +33,6 @@ module.exports = {
                 test: /\.(png|jpg|jpeg|svg|gif)$/,
                 type: 'asset/resource',
                 generator: {
-                    // Optional: Customize the output filename and path for the SVG files
                     filename: 'images/[name][ext][query]',
                 },
             },
@@ -41,7 +40,6 @@ module.exports = {
                 test: /\.(eot|ttf|woff|woff2)$/,
                 type: 'asset/resource',
                 generator: {
-                    // Optional: Customize the output filename and path for the SVG files
                     filename: 'fonts/[name][ext][query]',
                 },
             },

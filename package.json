@@ -1,25 +1,58 @@
 {
-  "name": "carts",
+  "name": "webpack_template",
   "version": "0.0.1",
-  "description": "catrs",
+  "description": "webpack_template",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nyc ts-mocha \"./frontend/src/**/*Test.ts\"",
     "build": "webpack",
     "watch": "webpack --watch"
+  },
+  "nyc": {
+    "report-dir": "./public/coverage",
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "frontend/src/**/*.ts"
+    ],
+    "exclude": [
+      "frontend/src/app.ts",
+      "**/*.d.ts",
+      "**/tests/*"
+    ],
+    "reporter": [
+      "html",
+      "text",
+      "text-summary"
+    ],
+    "all": true
   },
   "author": "mderrdx",
   "license": "ISC",
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/jsdom": "^21.1.7",
     "babel-loader": "^10.0.0",
     "css-loader": "^7.1.2",
+    "jsdom": "^17.0.0",
     "mini-css-extract-plugin": "^2.9.3",
+    "mocha": "^11.7.2",
+    "nyc": "^17.1.0",
     "postcss-loader": "^8.1.1",
     "sass": "^1.89.2",
     "sass-loader": "^16.0.5",
     "ts-loader": "^9.5.2",
+    "ts-mocha": "^11.1.0",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "webpack": "^5.101.0",
     "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "chai": "^6.0.1"
   }
 }
