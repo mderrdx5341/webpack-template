@@ -17,7 +17,7 @@ module.exports = {
         })*/
 	],
 	entry: {
-		app: path.resolve(__dirname, './frontend/src/app.ts'),
+		app: path.resolve(__dirname, './frontend/src/main.ts'),
 	},
     devtool: 'source-map',
     mode: "production", //production, development
@@ -61,7 +61,7 @@ module.exports = {
         ],
 	},
 	output: {
-		path: path.resolve(__dirname, './public/'),
+		path: path.resolve(__dirname, './www/'),
 		filename: '[name].js',
 	}
 }
