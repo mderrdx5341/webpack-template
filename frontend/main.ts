@@ -1,5 +1,5 @@
-import './App.scss';
-import App from './App';
+import './styles/App.scss';
+import App from './src/App';
 
 (function(){
 
