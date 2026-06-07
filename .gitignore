@@ -1,5 +1,5 @@
 node_modules/
 .nyc_output/
 /public/coverage/
-/www/
-!/www/index.html
+www/*
+!www/index.html
