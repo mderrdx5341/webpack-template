@@ -2,5 +2,15 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "allowJs": true,
+	"module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "types": ["node", "mocha"]
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
   }
 }

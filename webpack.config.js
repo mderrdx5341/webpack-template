@@ -20,12 +20,15 @@ module.exports = {
 		app: path.resolve(__dirname, './frontend/main.ts'),
 	},
     devtool: 'source-map',
-    mode: "production", //production, development
+    mode: process.env.NODE_ENV === 'development' ? 'development' : 'production', //production, development
     stats: {
-        //errorDetails: true
+        errorDetails: true
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            '@': path.resolve(__dirname, './frontend/src')
+        }
     },
     module: {
         rules: [
