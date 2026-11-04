@@ -5,19 +5,21 @@ import { loadAndDisplayUser } from './userProfile';
 describe('Тестирование асинхронного кода через Sinon Sandbox (userProfile.ts)', () => {
     let displayElement: HTMLDivElement;
     let sandbox: sinon.SinonSandbox;
+    let consoleErrorSpy: sinon.SinonSpy;
 
     beforeEach(() => {
-        // Подготавливаем DOM-окружение
         document.body.innerHTML = '<div id="user-name"></div>';
         displayElement = document.getElementById('user-name') as HTMLDivElement;
         
-        // 1. Создаем изолированную песочницу перед каждым тестом
         sandbox = sinon.createSandbox();
+
+        // Вешаем шпиона на встроенный метод console.error
+        // Теперь Sinon записывает каждый вызов этой функции в память
+        consoleErrorSpy = sandbox.stub(console, 'error');
     });
 
     afterEach(() => {
         document.body.innerHTML = '';
-        // 2. Одной командой сбрасываем все заглушки и восстанавливаем глобальный fetch
         sandbox.restore();
     });
 
@@ -28,7 +30,6 @@ describe('Тестирование асинхронного кода через 
     it('должен успешно загрузить пользователя и отобразить его имя в DOM', async () => {
         const mockUser = { id: 42, name: 'Иван Иванов', email: 'ivan@test.ru' };
 
-        // Красивый стаб: перехватываем global.fetch и заставляем его вернуть успешный Promise с ответом
         sandbox.stub(global, 'fetch').resolves({
             ok: true,
             status: 200,
@@ -38,10 +39,11 @@ describe('Тестирование асинхронного кода через 
         await loadAndDisplayUser(42, displayElement);
 
         expect(displayElement.textContent).to.equal('Привет, Иван Иванов!');
+        // Убеждаемся, что при успешном сценарии в логи ничего не писалось
+        expect(consoleErrorSpy.called).to.be.false;
     });
 
     it('должен выводить ошибку, если сервер ответил статусом 404 или 500', async () => {
-        // Заставляем fetch вернуть статус ошибки сервера
         sandbox.stub(global, 'fetch').resolves({
             ok: false,
             status: 404
@@ -50,14 +52,22 @@ describe('Тестирование асинхронного кода через 
         await loadAndDisplayUser(999, displayElement);
 
         expect(displayElement.textContent).to.equal('Ошибка загрузки профиля');
+        expect(consoleErrorSpy.called).to.be.false;
     });
 
-    it('должен выводить ошибку "Сетевая ошибка", если fetch выбросил исключение', async () => {
-        // Метод .rejects() имитирует жесткое падение промиса (отсутствие интернета)
-        sandbox.stub(global, 'fetch').rejects(new TypeError('Failed to fetch'));
+    it('должен выводить ошибку "Сетевая ошибка" и логировать сбой, если fetch упал', async () => {
+        const networkError = new TypeError('Failed to fetch');
+        sandbox.stub(global, 'fetch').rejects(networkError);
 
         await loadAndDisplayUser(1, displayElement);
 
         expect(displayElement.textContent).to.equal('Сетевая ошибка');
+
+        // ПРОВЕРКА ЛОГИРОВАНИЯ:
+        // 1. Убеждаемся, что console.error вызвался ровно 1 раз
+        expect(consoleErrorSpy.calledOnce).to.be.true;
+
+        // 2. Убеждаемся, что метод вызвался с конкретными аргументами
+        expect(consoleErrorSpy.calledWith('Критический сбой API:', networkError)).to.be.true;
     });
 });
