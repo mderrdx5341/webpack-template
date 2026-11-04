@@ -4,11 +4,13 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --require ts-node/register --require ./test-setup.ts \"frontend/src/**/*Test.ts\"",
-    "_posttest": "node -e \"const open = require('child_process').exec; open('start coverage/index.html');\"",
-    "test:watch": "nodemon --watch frontend/src --ext ts --exec \"mocha --require ts-node/register --require ./test-setup.ts \\\"frontend/src/**/*Test.ts\\\"\"",
-    "build": "cross-env NODE_ENV=production webpack",
-    "watch": "cross-env NODE_ENV=development webpack --watch"
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "test": "nyc mocha --require ts-node/register --require ./test-setup.ts \"frontend/src/**/*.spec.ts\"",
+    "posttest": "node -e \"const open = require('child_process').exec; open('start coverage/index.html');\"",
+    "test:watch": "nodemon --watch frontend/src --ext ts --exec \"mocha --require ts-node/register --require ./test-setup.ts \\\"frontend/src/**/*.spec.ts\\\"\"",
+    "test:e2e": "cross-env NODE_ENV=test mocha --require ts-node/register \"tests/e2e/**/*.e2e.ts\"",
+    "test:all": "npm run test && npm run test:e2e"
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",
@@ -22,7 +24,7 @@
     ],
     "exclude": [
       "frontend/src/app.ts",
-      "**/*Test.ts",
+      "**/*.spec.ts",
       "**/*.d.ts",
       "**/tests/*"
     ],
