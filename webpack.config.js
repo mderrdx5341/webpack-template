@@ -30,6 +30,16 @@ module.exports = {
             '@': path.resolve(__dirname, './frontend/src')
         }
     },
+    devServer: {
+        static: {
+            directory: path.resolve(__dirname, './www/'), // Откуда раздавать index.html
+        },
+        compress: true, // Включает сжатие gzip для ускорения загрузки
+        port: 8080,     // Красивый порт http://localhost:8080
+        hot: true,      // Включает Hot Module Replacement (живая перезагрузка)
+        open: true,     // Автоматически открывает вкладку в браузере при старте
+        watchFiles: ['./frontend/**/*', './www/**/*.html'], // За какими файлами следить
+    },
     module: {
         rules: [
             {
